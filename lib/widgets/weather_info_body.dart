@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/constants/get_theme_material_color.dart';
-import 'package:weather_app/cubits/get_weather_cubit/get_weather_cubit.dart';
-import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/cubits/weather_cubit/weather_cubit.dart';
 
 class WeatherInfoBody extends StatelessWidget {
-  const WeatherInfoBody({super.key, required this.weather});
+  const WeatherInfoBody({super.key});
 
-  final WeatherModel weather;
   @override
   Widget build(BuildContext context) {
-    WeatherModel weatherModel =
-        BlocProvider.of<GetWeatherCubit>(context).weatherModel!;
+    var weatherModel = BlocProvider.of<WeatherCubit>(context).weatherModel!;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -20,7 +17,7 @@ class WeatherInfoBody extends StatelessWidget {
           colors: [
             getThemeColor(weatherModel.weatherCondition),
             getThemeColor(weatherModel.weatherCondition)[500]!,
-            getThemeColor(weatherModel.weatherCondition)[50]!,
+            getThemeColor(weatherModel.weatherCondition)[200]!,
           ],
         ),
       ),
@@ -58,11 +55,11 @@ class WeatherInfoBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "MaxTemp: ${weatherModel.maxTemp.round()}",
+                    "MaxTemp: ${weatherModel.maxTemp.toInt()}",
                     style: const TextStyle(fontSize: 14),
                   ),
                   Text(
-                    "MinTemp: ${weatherModel.minTemp.round()}",
+                    "MinTemp: ${weatherModel.minTemp.toInt()}",
                     style: const TextStyle(fontSize: 14),
                   ),
                 ],

@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/constants/get_theme_material_color.dart';
-import 'package:weather_app/cubits/get_weather_cubit/get_weather_cubit.dart';
-import 'package:weather_app/cubits/get_weather_cubit/get_weather_states.dart';
+import 'package:weather_app/cubits/weather_cubit/weather_cubit.dart';
+import 'package:weather_app/cubits/weather_cubit/weather_states.dart';
+import 'package:weather_app/services/weather_service.dart';
 import 'package:weather_app/views/home_view.dart';
 
 void main() {
@@ -15,29 +17,22 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetWeatherCubit(),
-      child: Builder(
-          builder: (context) => BlocBuilder<GetWeatherCubit, WeatherState>(
-                builder: (context, state) {
-                  return MaterialApp(
-                    theme: ThemeData(
-                        appBarTheme: AppBarTheme(
-                          color: getThemeColor(
-                            BlocProvider.of<GetWeatherCubit>(context)
-                                .weatherModel
-                                ?.weatherCondition,
-                          ),
-                        ),
-                      
-                        ),
-                    debugShowCheckedModeBanner: false,
-                    home: const HomeView(),
-                  );
-                },
-              )),
+      create: (context) => WeatherCubit(WeatherService(Dio())),
+      child: BlocBuilder<WeatherCubit, WeatherState>(
+        builder: (context, state) {
+          return MaterialApp(
+            theme: ThemeData(
+              appBarTheme: AppBarTheme(
+                color: getThemeColor(
+                  BlocProvider.of<WeatherCubit>(context).weatherModel?.weatherCondition,
+                ),
+              ),
+            ),
+            debugShowCheckedModeBanner: false,
+            home: const HomeView(),
+          );
+        },
+      ),
     );
   }
 }
-
-
-
